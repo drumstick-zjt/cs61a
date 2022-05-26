@@ -236,3 +236,164 @@ while counter < 200:
     counter += 1
 ```
 
+## 4 Higher-order Functions
+
+### 4.1 Describing functions
+
+```python
+def square(x):
+    """Returns the square of X."""
+    return x * x
+```
+
+| Aspect                                                       | Example                                     |
+| :----------------------------------------------------------- | :------------------------------------------ |
+| A function's **domain** is the set of all inputs it might possibly take as arguments. | `x` is a number                             |
+| A function's **range** is the set of output values it might possibly return. | `square` returns a non-negative real number |
+| A pure function's **behavior** is the relationship it creates between input and output. | `square` returns the square of `x`          |
+
+### 4.2 Generalization
+
+The concept of Generalization is to reduce redundant codes.
+
+### 4.3 Higher-order functions
+
+#### 4.3.1 definition
+
+A function that either:
+
+- Takes another function as an argument
+- Returns a function as its result
+
+All other functions are considered first-order functions.
+
+#### 4.3.2 [Functions as arguments](#3.2.3 Function name as a variable)
+
+#### 4.3.3 Functions as return values
+
+Functions defined within other function bodies are bound to names in a local frame.
+
+```python
+def make_adder(n):
+    """Return a function that takes one argument k
+       and returns k + n.
+    >>> add_three = make_adder(3)
+    >>> add_three(4)
+    7
+    """
+    def adder(k):
+        return k + n
+    return adder
+```
+
+Once many simple functions are defined, function *composition* is a natural method of combination to include in our programming language. That is, given two functions `f(x)` and `g(x)`, we might want to define `h(x) = f(g(x))`. We can define function composition using our existing tools:
+
+```python
+>>> def compose1(f, g):
+        def h(x):
+            return f(g(x))
+        return h
+```
+
+### 4.4 Lambda Syntax
+
+A **lambda expression** is a simple function definition that evaluates to a function.
+
+The syntax:
+
+```python
+lambda <parameters>: <expression>
+```
+
+A function that takes in `parameters` and returns the result of `expression`.
+
+A lambda version of the `square` function:
+
+```python
+square = lambda x: x * x
+```
+
+A function that takes in parameter `x` and returns the result of `x * x`.
+
+A lambda expression does **not** contain return statements or any statements at all.
+
+#### 4.4.1 Def statements vs. Lambda expressions
+
+![lambda](.\assets\week2\lambda.png)
+
+| Both create a function with the same domain, range, and behavior. |
+| ------------------------------------------------------------ |
+| Both bind that function to the name "square".                |
+| Only the `def` statement gives the function an **intrinsic name**, which shows up in environment diagrams but doesn't affect execution (unless the function is printed). |
+
+#### 4.4.2 Lambda as argument
+
+It's convenient to use a lambda expression when you are passing in a simple function as an argument to another function.
+
+Instead of...
+
+```python
+def cube(k):
+    return k ** 3
+
+summation(5, cube)
+```
+
+We can use a lambda:
+
+```python
+summation(5, lambda k: k ** 3)
+```
+
+An example:
+
+```python
+lambda x: x if x > 0 else 0
+```
+
+## 5. Environments
+
+Every expression is evaluated in the context of an environment.
+
+A name evaluates to the value bound to that name in the earliest frame of the current environment in which that name is found.
+
+- Every user-defined **function** has a parent frame. The parent of a **function** is the **frame in which it was defined**.
+
+- Every local **frame** has a parent frame. The parent of a **frame** is the **parent of the called function**
+
+### 5.1 Local Name visibility
+
+Local names are *not* visible to other (non-nested) functions.
+
+An environment is a sequence of frames.
+
+The environment created by calling a top-level function consists of one local frame followed by the global frame.
+
+### 5.2 Function currying
+
+**Currying:** Converting a function that takes multiple arguments into a single-argument higher-order function.
+
+A function that currys any two-argument function:
+
+```python
+def curry2(f):
+    def g(x):
+        def h(y):
+            return f(x, y)
+        return h
+    return g
+```
+
+```python
+make_adder = curry2(add)
+make_adder(2)(3)
+```
+
+
+
+
+
+
+
+
+
