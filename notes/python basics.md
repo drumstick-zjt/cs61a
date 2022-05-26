@@ -166,11 +166,42 @@ res = a if a > b else b
 # <==> res = max(a,b)
 ```
 
+Another thing to remember is that python doesn't have `&&` or `||` or `!`operation, the substitute are `and` 、`or` and `not`.
+
+### Short circuiting
+
+What do you think will happen if we type the following into Python?
+
+```python
+1 / 0
+```
+
+Try it out in Python! You should see a `ZeroDivisionError`. But what about this expression?
+
+```python
+True or 1 / 0
+```
+
+It evaluates to `True` because Python's `and` and `or` operators *short-circuit*. **That is, they don't necessarily evaluate every operand.**
+
+| Operator | Checks if:                 | Evaluates from left to right up to: | Example                                |
+| :------- | :------------------------- | :---------------------------------- | :------------------------------------- |
+| AND      | All values are true        | The first false value               | `False and 1 / 0` evaluates to `False` |
+| OR       | At least one value is true | The first true value                | `True or 1 / 0` evaluates to `True`    |
+
+Short-circuiting happens when the operator reaches an operand that allows them to make a conclusion about the expression. For example, `and` will short-circuit as soon as it reaches the first false value because it then knows that not all the values are true.
+
+**If `and` and `or` do not *short-circuit*, they just return the last value**; another way to remember this is that **`and` and `or` always return the last thing they evaluate, whether they short circuit or not**. Keep in mind that `and` and `or` don't always return booleans when using values other than `True` and `False`. The examples are as follows.
+
+<img src=".\assets\week2\short-circuiting.png" alt="short-circuiting" style="zoom:50%;" />
+
 ### 3.4 Booleans
 
 A **Boolean value** is either `True` or `False` and is used frequently in computer programs.
 
 An expression can evaluate to a Boolean. Most Boolean expressions use either comparison or logical operators (and or not).
+
+**Truthy and Falsey Values**: It turns out `and` and `or` work on more than just booleans (`True`, `False`). Python values such as `0`, `None`, `''` (the empty string), and `[]` (the empty list) are considered false values. *All* other values are considered true values.
 
 ### 3.5 Iteration
 
