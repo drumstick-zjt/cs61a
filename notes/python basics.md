@@ -236,7 +236,7 @@ while counter < 200:
     counter += 1
 ```
 
-## 4 Higher-order Functions
+## 4. Higher-order Functions
 
 ### 4.1 Describing functions
 
@@ -256,7 +256,7 @@ def square(x):
 
 The concept of Generalization is to reduce redundant codes.
 
-### 4.3 Higher-order functions
+### 4.3 Higher-order functions(HOF)
 
 #### 4.3.1 definition
 
@@ -351,6 +351,41 @@ An example:
 lambda x: x if x > 0 else 0
 ```
 
+### 4.5 *Args
+
+What if you want a function to accept any number of arguments?
+
+That's possible by using the `*args` syntax in the function definition.
+
+```python
+def func(*args):
+    # Do something with *args
+```
+
+One way to use `*args` is to send those arguments into another function.
+
+```python
+def min_and_max(*args):
+    return min(*args), max(*args)
+
+min_and_max(-2, 33, -40, 400, 321) # -40, 400
+```
+
+Also, *args can be used to forward a HOF.
+
+
+```python
+def printed(f):
+    def print_and_return(*args):
+        result = f(*args)
+        print('Result:', result)
+        return result
+    return print_and_return
+
+printed_max = printed(max)
+printed_max(-2, 33, -40, 400, 321)
+```
+
 ## 5. Environments
 
 Every expression is evaluated in the context of an environment.
@@ -388,6 +423,126 @@ def curry2(f):
 make_adder = curry2(add)
 make_adder(2)(3)
 ```
+
+## 6. String formatting
+
+### 6.1 String concatenation
+
+So far, we've been using the + operator for combining string literals with the results of expressions.
+
+```python
+artist = "Lil Nas X"
+song = "Industry Baby"
+place = 2
+
+print("Debuting at #" + str(place) + ": '" + song + "' by " + artist)
+```
+
+But that's not ideal:
+
+- Easy to bungle up the + signs
+- Hard to grok what the final string will be
+- Requires explicitly `str()`ing non-strings
+
+### 6.2 String interpolation
+
+**String interpolation** is the process of combining string literals with the results of expressions.
+
+Available since Python 3.5, **f strings** (formatted string literals) are the best way to do string interpolation.
+
+Just put an `f` in front of the quotes and then put any valid Python expression in curly brackets inside:
+
+```python
+artist = "Lil Nas X"
+song = "Industry Baby"
+place = 2
+
+print(f"Debuting at #{place}: '{song}' by {artist}")
+```
+
+Any valid Python expression can go inside the parentheses, and will be executed in the current environment.
+
+```python
+greeting = 'Ahoy'
+noun = 'Boat'
+
+print(f"{greeting.lower()}, {noun.upper()}yMc{noun}Face")
+
+print(f"{greeting*3}, {noun[0:3]}yMc{noun[-1]}Face")
+```
+
+## 7. Exceptions & Decorators
+
+### 7.1 Exceptions
+
+Python raises an exception whenever a runtime error occurs. If an exception is not handled, the program stops executing immediately.
+
+To handle an exception (keep the program running), use a `try` statement.
+
+```python
+try:
+    <try suite>
+except <exception class> as <name>:
+    <except suite>
+   ...
+```
+
+example:
+
+```python
+try:
+    quot = 10/0
+except ZeroDivisionError as e:
+    print('handling a', type(e))
+    quot = 0
+return q
+```
+
+#### Assert Statements
+
+Assert statements raise an exception of type `AssertionError`
+
+Assertions are designed to be used liberally. They can be ignored to increase efficiency by running Python with the "-O" flag; "O" stands for optimized.
+
+```shell
+$ python3 -O test.py
+```
+
+#### Raise Statements
+
+Any type of exception can be raised with a `raise` statement.
+
+```python
+raise <expression>
+```
+
+\<expression> must evaluate to a subclass of `BaseException` or an instance of one.
+
+Exceptions are constructed like any other object. E.g., `TypeError('Bad argument!')`.
+
+### 7.2 Decorators
+
+The notation:
+
+```python
+@ATTR
+def aFunc(...):
+    ...
+```
+
+is essentially equivalent to:
+
+```python
+def aFunc(...):
+    ...
+aFunc = ATTR(aFunc)
+```
+
+`ATTR` can be any expression, not just a single function name.
+
+
+
+
 
 
 
