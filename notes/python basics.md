@@ -398,7 +398,7 @@ A name evaluates to the value bound to that name in the earliest frame of the cu
 
 ### 5.1 Local Name visibility
 
-Local names are *not* visible to other (non-nested) functions.
+**Local names are *not* visible to other (non-nested) functions.**
 
 An environment is a sequence of frames.
 
