@@ -319,7 +319,7 @@ A lambda expression does **not** contain return statements or any statements at 
 
 #### 4.4.1 Def statements vs. Lambda expressions
 
-![lambda](.\assets\week2\lambda.png)
+<img src=".\assets\week2\lambda.png" alt="lambda" style="zoom:50%;" />
 
 | Both create a function with the same domain, range, and behavior. |
 | ------------------------------------------------------------ |
