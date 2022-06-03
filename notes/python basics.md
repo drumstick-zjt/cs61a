@@ -371,7 +371,7 @@ def min_and_max(*args):
 min_and_max(-2, 33, -40, 400, 321) # -40, 400
 ```
 
-Also, *args can be used to forward a HOF.
+**Also, *args can be used to forward a HOF.**
 
 
 ```python
