@@ -79,7 +79,7 @@ print(print(1), print(2))
 
 ### 3.2 More function features
 
-#### 3.2.1  Default arguments
+#### Default arguments
 
 In the function signature, a parameter can specify a **default value**. If that argument isn't passed in, the default value is used instead.
 
@@ -95,7 +95,7 @@ calculate_dog_age(3, 6)
 calculate_dog_age(3, multiplier=6)
 ```
 
-#### 3.2.2 Multiple return values
+#### Multiple return values
 
 A function can specify multiple return values, separated by commas.
 
@@ -112,7 +112,7 @@ Any code that calls that function must also "unpack it" using commas:
 q, r = divide_exact(618, 10)
 ```
 
-#### 3.2.3 Function name as a variable
+#### Function name as a variable
 
 Unlike any other programming language, python can convey function's name as a variable. Example:
 
@@ -168,7 +168,7 @@ res = a if a > b else b
 
 Another thing to remember is that python doesn't have `&&` or `||` or `!`operation, the substitute are `and` 、`or` and `not`.
 
-### Short circuiting
+#### Short circuiting
 
 What do you think will happen if we type the following into Python?
 
@@ -205,7 +205,7 @@ An expression can evaluate to a Boolean. Most Boolean expressions use either com
 
 ### 3.5 Iteration
 
-#### 3.5.1 While loops
+#### While loops
 
 The while loop syntax:
 
@@ -258,7 +258,7 @@ The concept of Generalization is to reduce redundant codes.
 
 ### 4.3 Higher-order functions(HOF)
 
-#### 4.3.1 definition
+#### def
 
 A function that either:
 
@@ -267,9 +267,9 @@ A function that either:
 
 All other functions are considered first-order functions.
 
-#### 4.3.2 [Functions as arguments](#3.2.3 Function name as a variable)
+#### [Functions as arguments](# Function name as a variable)
 
-#### 4.3.3 Functions as return values
+#### Functions as return values
 
 Functions defined within other function bodies are bound to names in a local frame.
 
@@ -317,7 +317,7 @@ A function that takes in parameter `x` and returns the result of `x * x`.
 
 A lambda expression does **not** contain return statements or any statements at all.
 
-#### 4.4.1 Def statements vs. Lambda expressions
+#### Def statements vs. Lambda expressions
 
 <img src=".\assets\week2\lambda.png" alt="lambda" style="zoom:50%;" />
 
@@ -326,7 +326,7 @@ A lambda expression does **not** contain return statements or any statements at 
 | Both bind that function to the name "square".                |
 | Only the `def` statement gives the function an **intrinsic name**, which shows up in environment diagrams but doesn't affect execution (unless the function is printed). |
 
-#### 4.4.2 Lambda as argument
+#### Lambda as argument
 
 It's convenient to use a lambda expression when you are passing in a simple function as an argument to another function.
 
@@ -539,6 +539,634 @@ aFunc = ATTR(aFunc)
 ```
 
 `ATTR` can be any expression, not just a single function name.
+
+## 8. Containers
+
+### 8.1 Lists
+
+#### Def
+
+Lists can hold any Python values, separated by commas: 
+
+```python
+members = []
+members = ["Pamela", "Tinu", "Brenda", "Kaya"]
+ages_of_kids = [1, 2, 7]
+prices = [79.99, 49.99, 89.99]
+digits = [2//2, 2+2+2+2, 2, 2*2*2]
+remixed = ["Pamela", 7, 79.99, 2*2*2]
+```
+
+#### Length
+
+Use the global `len()` function to find the length of a list.
+
+```python
+attendees = ["Tammy", "Shonda", "Tina"]
+
+print(len(attendees))   #  3
+```
+
+#### Accessing list items (bracket)
+
+Negative indices are also possible:
+
+```python
+letters = ['A', 'B', 'C']
+# Index:   0     1     2
+letters[-1]  # 'C'
+letters[-2]  # 'B'
+letters[-3]  # 'A'
+letters[-4]  # 🚫 Error!
+```
+
+#### Accessing list items (func)
+
+```python
+from operator import getitem
+
+getitem(letters, 0)
+```
+
+#### List concatenation
+
+Add two lists together using the `+` operator:
+
+```python
+boba_prices = [5.50, 6.50, 7.50]
+smoothie_prices = [7.00, 7.50]
+all_prices = boba_prices + smoothie_prices
+```
+
+Or the `add` function:
+
+```python
+from operator import add
+
+boba_prices = [5.50, 6.50, 7.50]
+smoothie_prices = [7.00, 7.50]
+all_prices = add(boba_prices, smoothie_prices)
+```
+
+#### List repetition
+
+Concatenate the same list multiple times using the `*` operator:
+
+```python
+boba_prices = [5.50, 6.50, 7.50]
+more_boba = boba_prices * 3
+```
+
+Or the `mul` function:
+
+```python
+from operator import mul
+
+boba_prices = [5.50, 6.50, 7.50]
+more_boba = mul(boba_prices, 3)
+```
+
+#### Nested Lists
+
+Since Python lists can contain any values, an item can itself be a list.
+
+```python
+gymnasts = [ ["Brittany", 9.15, 9.4, 9.3, 9.2],
+                ["Lea", 9, 8.8, 9.1, 9.5],
+                ["Maya", 9.2, 8.7, 9.2, 8.8] ]
+```
+
+> pay attention to len(gymnasts) or len(gymnasts[0]).
+>
+> accessing by` [][]`.
+
+### 8.2 Containment
+
+#### Containment operator
+
+Use the `in` operator to test if value is inside a container:
+
+```python
+digits = [2, 8, 3, 1, 8, 5, 3, 0, 7, 1]
+
+1 in digits # True
+
+3 in digits # True
+
+4 in digits # False
+
+not (4 in digits) # True
+```
+
+#### For statements
+
+##### basic
+
+```python
+for <name> in <expression>:
+    <suite>
+```
+
+1. Evaluate the header `<expression>`, which must yield an iterable value (a sequence)
+2. For each element in that sequence, in order:
+   1. Bind `<name>` to that element in the current frame
+   2. Execute the `<suite>`
+
+##### Sequence unpacking in for statements
+
+```python
+pairs = [[1, 2], [2, 2], [3, 2], [4, 4]]
+same_count = 0
+
+for x, y in pairs:
+    if x == y:
+        same_count = same_count + 1
+```
+
+#### Ranges
+
+A range represents a sequence of ***integers***.
+
+```
+range(-2, 3) # -2, -1, 0, 1, 2
+range(6) # 0,1,2,3,4,5
+```
+
+### 8.3 List Comprehension
+
+A way to create a new list by "mapping" an existing list.
+
+#### short version
+
+```python
+[<map exp> for <name> in <iter exp>]
+
+odds = [1, 3, 5, 7, 9]
+evens = [(num + 1) for num in odds]
+```
+
+#### Long version (with filter):
+
+```python
+[<map exp> for <name> in <iter exp> if <filter exp>]
+
+temps = [60, 65, 71, 67, 77, 89]
+hot = [temp for temp in temps if temp > 70]
+```
+
+#### List comprehension execution procedure
+
+- Add a new frame with the current frame as its parent.
+- Create an empty result list that is the value of the expression.
+- For each element in the iterable value of `<iter exp>`:
+  - Bind `<name>` to that element in the new frame from step 1.
+  - If `<filter exp>` evaluates to a true value, then add the value of `<map exp>` to the result list.
+
+#### Example
+
+```python
+def divisors(n):
+    """Returns all the divisors of N.
+
+    >>> divisors(12)
+    [1, 2, 3, 4, 6]
+    """
+    return [x for x in range(1, n) if n % x == 0]
+
+def front(s, f):
+    """Return S but with elements chosen by F at the front.
+
+    >>> front(range(10), lambda x: x % 2 == 1)  # odds in front
+    [1, 3, 5, 7, 9, 0, 2, 4, 6, 8]
+    """
+    return [e for e in s if f(e)] + [e for e in s if not f(e)]
+```
+
+### 8.4 String literal
+
+Multi-line strings automatically insert new lines:
+
+```python
+"""The Zen of Python
+claims, Readability counts.
+Read more: import this."""
+# 'The Zen of Python\nclaims, Readability counts.\nRead more: import this.'
+```
+
+#### length
+
+```python
+s = 'abc'
+a = len(s) # a = 3
+```
+
+#### Differences between strings & lists
+
+- A single-character string is the same as the character itself.
+- The `in` operator will match substrings.
+
+```python
+initial = 'P'
+initial[0] == initial  # True
+
+'W' in 'Where\'s Waldo'      # True
+'Waldo' in  'Where\'s Waldo' # True
+```
+
+## 9. Dictionaries + More Lists
+
+### 9.1 Dictionaries 
+
+A `dict` is a mapping of key-value pairs.
+
+```python
+states = {
+	"CA": "California",
+	"DE": "Delaware",
+	"NY": "New York",
+	"TX": "Texas",
+	"WY": "Wyoming"
+}
+
+# Dictionaries support similar operations as lists/strings:
+>>> len(states)
+>>> 5
+>>> "CA" in states
+>>> True
+>>> "ZZ" in states
+>>> False
+```
+
+#### Accessing a dict
+
+```python
+words = {
+	"más": "more",
+	"otro": "other",
+	"agua": "water"
+}
+# Ways to access a value by key:
+>>> words["otro"]
+>>> 'other'
+
+>>> words["pavo"]
+KeyError: pavo
+
+>>> words.get("pavo", "🤔")
+'🤔'
+# if exits key "pavo", return its value, else return "🤔"
+```
+
+#### Dict Rules
+
+- A key **cannot** be a list or dictionary (or any other mutable type)
+- The values can be any type.
+- All keys in a dictionary are distinct.
+
+#### Dict Iterations
+
+```python
+insects = {"spiders": 8, "centipedes": 100, "bees": 6}
+for name in insects:
+    print(insects[name])
+```
+
+Keys are iterated over in the order they are first added.
+
+#### Dict Comprehensions
+
+```python
+{key: value for <name> in <iter exp>}
+
+{x: x*x for x in range(3,6)}
+
+def index(keys, values, match):
+    """Return a dictionary from keys k to a list of values v for which 
+    match(k, v) is a true value.
+    
+    >>> index([7, 9, 11], range(30, 50), lambda k, v: v % k == 0)
+    {7: [35, 42, 49], 9: [36, 45], 11: [33, 44]}
+    """
+    return {k: [v for v in values if match(k, v)] for k in keys}
+```
+
+### 9.2 List Diagrams
+
+Lists are represented as a row of index-labeled adjacent boxes, one per element.
+
+For nested lists, each box either contains a primitive value or points to a compound value.
+
+### 9.3 Slicing
+
+#### Syntax
+
+Slicing a list creates a new list with a subsequence of the original list.
+
+```python
+letters = ["A", "B", "C", "D", "E", "F"]
+        #   0    1    2    3    4    5
+
+sublist1 = letters[1:]    # ['B', 'C', 'D', 'E', 'F']
+sublist2 = letters[1:4]   # ['B', 'C', 'D']
+```
+
+Slicing also works for strings.
+
+```python
+compound_word = "cortaúñas"
+
+word1 = compound_word[:5]    # "corta"
+word2 = compound_word[5:]   # "úñas"
+```
+
+#### Copying whole lists
+
+Slicing a whole list copies a list:
+
+```python
+listA = [2, 3]
+listB = listA # only give reference, still point to the same list
+
+listC = listA[:] # copy a new list
+listA[0] = 4
+listB[1] = 5
+```
+
+`list()` creates a new list containing existing elements from any iterable:
+
+```python
+listA = [2, 3]
+listB = listA
+
+listC = list(listA) # same as listC = listA[:]
+listA[0] = 4
+listB[1] = 5
+```
+
+### 9.4 Built-ins for iterables
+
+#### Functions that process iterables
+
+The following built-in functions work for lists, strings, dicts, and any other **iterable** data type.
+
+| Function                                                     | Description                                                  |
+| :----------------------------------------------------------- | :----------------------------------------------------------- |
+| `sum(iterable, start)`                                       | Returns the sum of values in `iterable`, initializing sum to `start` |
+| [`all(iterable)`](https://docs.python.org/3/library/functions.html#all) | Return `True` if all elements of `iterable` are true (or if `iterable` is empty) |
+| [`any(iterable)`](https://docs.python.org/3/library/functions.html#any) | Return `True` if any element of `iterable` is true. Return `False` if `iterable` is empty. |
+| `max(iterable, key=None)`                                    | Return the max value in `iterable`                           |
+| `min(iterable, key=None)`                                    | Return the min value in `iterable`                           |
+
+- A **key** function can decide how to compare each value:
+
+  ```python
+  coords = [ [37, -144], [-22, -115], [56, -163] ]
+  max(coords, key=lambda coord: coord[0])  # [56, -163]
+  min(coords, key=lambda coord: coord[0])  #  [-22, -115]
+  
+  gymnasts = [ ["Brittany", 9.15, 9.4, 9.3, 9.2],
+      ["Lea", 9, 8.8, 9.1, 9.5],
+      ["Maya", 9.2, 8.7, 9.2, 8.8] ]
+  min(gymnasts, key=lambda scores: min(scores[1:]))    # ["Maya", ...]
+  max(gymnasts, key=lambda scores: sum(scores[1:], 0)) # ["Brittany", ...]
+  ```
+
+### 9.5 Lists' Recursion
+
+#### Recursively sum a list
+
+```python
+def sum_nums(nums):
+    """Returns the sum of the numbers in NUMS.
+    >>> sum_nums([6, 24, 1984])
+    2014
+    >>> sum_nums([-32, 0, 32])
+    0
+    """ 
+    if nums == []:
+        return 0
+    else:
+        return nums[0] + sum_nums( nums[1:] )
+```
+
+When recursively processing lists, the base case is often the empty list and the recursive case is often all-but-the-first items.
+
+#### Recursively reversing a string
+
+```python
+def reverse(s):
+    """Returns a string with the letters of S
+    in the inverse order.
+    >>> reverse('ward')
+    'draw'
+    """
+    if len(s) == 1:
+        return s
+    else:
+        return reverse(s[1:]) + s[0]
+```
+
+When recursively processing strings, the base case is typically an empty string or single-character string, and the recursive case is often all-but-the-first characters.
+
+#### Recursion on different data types
+
+| data type | base case condition    | current item    | recursive case arg |
+| --------- | ---------------------- | --------------- | ------------------ |
+| lists     | `== []` ,`len(L) == 0` | `L[0]` ,`L[-1]` | `L[1:]` ,`L[:-1]`  |
+| Strings   | `== ''` ,`len(S) == 1` | `S[0]`          | `S[1:]` ,`S[:-1]`  |
+
+## 10. Mutability
+
+### 10.1 Objects
+
+Every value in Python is an object.
+
+### 10.2 List Mutation
+
+- `append()` adds a single element to a list.
+
+- `extend(Iterable)` adds all the elements in one list to a list.
+
+  ```python
+  s = [2, 3]
+  t = [5, 6]
+  s.extend(4) # 🚫 Error: 4 is not an iterable!
+  s.extend(t)
+  t = 0
+  ```
+
+- `pop()` removes and returns the last element.
+
+- `remove(arg)` removes the first element equal to the argument.
+
+- use slicing
+
+  ```python
+  L = [1, 2, 3, 4, 5]
+  
+  L[2] = 6
+  
+  L[1:3] = [9, 8]
+  
+  L[2:4] = []            # Deleting elements
+  
+  L[1:1] = [2, 3, 4, 5]  # Inserting elements
+  
+  L[len(L):] = [10, 11]  # Appending
+  
+  L = L + [20, 30]
+  
+  L[0:0] = range(-3, 0)  # Prepending
+  ```
+
+### 10.3 Dict Mutation
+
+- add key-values: `users["profpamela"] = "b3stp@ssEvErDontHackMe"`
+
+### 10.4 Tuples
+
+#### def
+
+A **tuple** is an *immutable* sequence. It's like a list, but no mutation allowed.
+
+```python
+# an empty tuple
+empty = ()
+# or
+empty = tuple()
+
+# A tuple with multiple elements:
+conditions = ('rain', 'shine')
+# or
+conditions = 'rain', 'shine'
+
+# A tuple with a single element
+oogly = (61,)
+# or
+oogly = 61,
+```
+
+#### Operations
+
+Many of list's read-only operations work on tuples.
+
+```python
+('come', '☂') + ('or', '☼')  # ('come', '☂', 'or', '☼')
+
+'wally' in ('wall-e', 'wallace', 'waldo')  # True
+
+rainbow = ('red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'violet')
+roy = rainbow[:3]  # ('red', 'orange', 'yellow')
+```
+
+### 10.5 Immutability vs. Mutability
+
+An **immutable** value is unchanging once created.
+
+- Immutable types (part): int, float, string, tuple.
+
+  ```python
+  a_tuple = (1, 2)
+  a_tuple[0] = 3                  # 🚫 Error! Tuple items cannot be set.
+  a_string = "Hi y'all"
+  a_string[1] = "I"               # 🚫 Error! String elements cannot be set.
+  ```
+
+- Mutable types (part): list, dict.
+
+#### Name change vs. mutation
+
+The value of an expression can change due to either changes in names *or* mutations in objects.
+
+#### Mutables inside immutables
+
+An immutable sequence may still change if it contains a mutable value as an element.
+
+```python
+t = (1, [2, 3])
+t[1][0] = 99
+t[1][1] = "Problems"
+```
+
+#### Equality of contents vs. Identity of objects
+
+```python
+list1 = [1,2,3]
+list2 = [1,2,3]
+```
+
+**Equality**: `exp0 == exp1`
+evaluates to `True` if both `exp0` and `exp1` evaluate to objects containing equal values
+
+```python
+list1 == list2  # True
+```
+
+**Identity**: `exp0 is exp1`
+evaluates to `True` if both `exp0` and `exp1` evaluate to the same object Identical objects always have equal values.
+
+```python
+list1 is list2  # False
+```
+
+### 10.6 Mutation in function calls
+
+**A function can change the value of any object in its scope.**
+
+```python
+def do_stuff_to(four):
+	# What can we put here?
+	four[0] += 1'
+    
+four = [1, 2, 3, 4]
+print(four[0]) # 1
+do_stuff_to(four)
+print(four[0]) # 2
+```
+
+even without arguments
+
+```
+def do_other_stuff():
+	four[3] = 99
+
+four = [1, 2, 3, 4]
+print(four[3]) # 4
+do_other_stuff()
+print(four[3]) # 99
+```
+
+### 10.7 Immutability in function calls
+
+Immutable values are protected from mutation.
+
+### 10.8 Mutable default arguments
+
+A default argument value is part of a function value, *not* generated by a call.
+
+```python
+def f(s=[]):
+    s.append(3)
+    return len(s)
+
+f() # 1
+f() # 2
+f() # 3
+```
+
+Each time the function is called, `s` is bound to the same value.
+
+<img src=".\assets\week3\mutable-default-arguments.png" alt="lambda" style="zoom:50%;" />
+
+## 11. OOP
+
+
+
+
+
+
+
+
 
 
 
