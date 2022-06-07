@@ -1,3 +1,6 @@
+from operator import le
+
+
 HW_SOURCE_FILE = __file__
 
 
@@ -17,7 +20,13 @@ def flatten(s):
     >>> x
     [[1, [1, 1]], 1, [1, 1]]
     """
-    "*** YOUR CODE HERE ***"
+    res = []
+    for list_or_element in s:
+        if type(list_or_element) == list:
+            res = res + flatten(list_or_element)
+        else:
+            res.append(list_or_element)
+    return res
 
 
 def couple(s, t):
@@ -33,7 +42,10 @@ def couple(s, t):
     [['c', 's'], [6, '1']]
     """
     assert len(s) == len(t)
-    "*** YOUR CODE HERE ***"
+    res = []
+    for i in range(len(s)):
+        res.append([s[i], t[i]])
+    return res
 
 
 def insert_items(lst, entry, elem):
@@ -62,7 +74,13 @@ def insert_items(lst, entry, elem):
     ...       ['List', 'ListComp', 'Slice'])
     True
     """
-    "*** YOUR CODE HERE ***"
+    i = 0
+    while i < len(lst):
+        if lst[i] == entry:
+            lst.insert(i + 1, elem)
+            i += 1
+        i += 1
+    return lst
 
 
 def change_abstraction(change):

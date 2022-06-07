@@ -17,4 +17,5 @@ def replace_elements(source_list, dest_list):
     >>> s3
     [5, 4, 3, 0, 0]
     """
-    "*** YOUR CODE HERE ***"
+    assert(len(dest_list) >= len(source_list))
+    dest_list[0:len(source_list)] = source_list
