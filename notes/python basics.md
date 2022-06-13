@@ -1160,6 +1160,167 @@ Each time the function is called, `s` is bound to the same value.
 
 ## 11. OOP
 
+### 11.1 Intro
+
+```python
+# Define a new type of data
+class Product:
+
+    # Set the initial values
+    def __init__(self, name, price, nutrition_info):
+        self.name = name
+        self.price = price
+        self.nutrition_info = nutrition_info
+        self.inventory = 0
+
+    # Define methods
+    def increase_inventory(self, amount):
+        self.inventory += amount
+
+    def reduce_inventory(self, amount):
+        self.inventory -= amount
+
+    def get_label(self):
+        return "Foxolate Shop: " + self.name
+
+    def get_inventory_report(self):
+        if self.inventory == 0:
+            return "There are no bars!"
+        return f"There are {self.inventory} bars."
+
+pina_bar = Product("Piña Chocolotta", 7.99,
+    ["200 calories", "24 g sugar"])
+
+pina_bar.increase_inventory(2)
+```
+
+- The `__init__` method of the class is called with the new object as its first argument (named `self`), along with any additional arguments provided in the call expression.
+- Instance variables are data attributes that describe the state of an object.
+    - The Class above's `__init__` initializes 4 instance variables.
+- Method Invocation: ***`pina_bar.increase_inventory` is a bound method: a function which has its first parameter pre-bound to a particular value.***
+- Dot Notation: All object attributes (which includes variables and methods) can be accessed with dot notation.
+
+### 11.2 Class Variables (`static`)
+
+A class variable is an assignment inside the class that isn't inside a method body.
+
+```python
+class Product:
+    sales_tax = 0.07
+```
+
+Class variables are "shared" across all instances of a class because they are attributes of the class, not the instance.(***similar to static in java.***)
+
+### 11.3 Accessing attributes
+
+#### getattr/hasattr built-ins
+
+Using getattr, we can look up an attribute using a string:
+
+```python
+getattr(pina_bar, 'inventory')   # 1
+
+hasattr(pina_bar, 'reduce_inventory')  # True
+```
+
+`getattr` and `dot expressions` look up a name in the same way.
+- it may return one of its ***instance attributes***
+- it may return one of its ***class variables***
+
+### 11.4 Public vs. Private
+
+#### Public
+
+- ***Attributes are all public***
+```python
+# you can even assign new instance variables.
+pina_bar.brand_new_attribute_haha = "instanception"
+```
+
+#### Private
+- `__`(***double underscore***) before very private attribute names 
+- `_` (***single underscore***) before semi-private attribute names
+- no underscore before public attribute names
+
+### 11.5 Inheritance
+
+#### How to declare a subclass?
+
+To declare a subclass, put parentheses after the class name and specify the base class in the parentheses:
+
+```python
+class Panda(Animal):
+    pass # overrides nothing
+```
+
+Then the subclasses only need the code that's unique to them. They can redefine any aspect: class variables, method definitions, or constructor. A redefinition is called overriding.
+
+Subclasses can override existing class variables and assign new class variables.
+
+#### Using methods from the base class
+
+To refer to a superclass method, we can use `super()`.
+
+```python
+class Lion(Animal):
+    species_name = "Lion"
+    scientific_name = "Panthera"
+    calories_needed = 3000
+
+    def eat(self, food):
+        if food.type == "meat":
+            super().eat(food)
+```
+
+`super().attribute` refers to the definition of attribute in the superclass of the first parameter to the method.
+
+#### Overriding `__init__`
+
+### 11.6 Layers of inheritance
+
+Every Python 3 class implicitly extends the `object` class (similar to java).
+
+### 11.7 Multiple inheritance
+
+A class may inherit from multiple base classes in Python.
+
+We inherit from base classes by putting both their names in the parentheses:
+
+```python
+class Rabbit(Prey, Herbivore):
+class Lion(Predator, Carnivore):
+```
+
+### 11.8 Class Methods (`static methods in java`)
+
+By default, a function definition inside a class is a bound method that receives an instance of that class.
+
+To instead make a function that receives the class itself, use the `@classmethod` decorator.
+
+```python
+class Rabbit(Animal):
+    species_name = "European rabbit"
+    scientific_name = "Oryctolagus cuniculus"
+    calories_needed = 200
+    play_multiplier = 8
+    
+    @classmethod
+    def rabbit_twins(cls, name1, name2):
+        rabbit1 = cls(name1) # cls as a constuctor
+        rabbit2 = cls(name2)
+        rabbit1.interact_with(rabbit2)
+        return [rabbit1, rabbit2]
+
+twinsies = Rabbit.rabbit_twins("Fluffy", "Hoppy")
+```
+
+
+
+
+
+
+
+
 
 
 
