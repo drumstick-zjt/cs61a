@@ -1,3 +1,6 @@
+from re import I
+
+
 class SmartFridge:
     """"
     >>> fridgey = SmartFridge()
@@ -15,7 +18,15 @@ class SmartFridge:
         self.items = {}
 
     def add_item(self, item, quantity):
-        "*** YOUR CODE HERE ***"
+        if item in self.items:
+            self.items[item] += quantity
+        else:
+            self.items[item] = quantity
+        print(f"'I now have {self.items[item]} {item}'")
 
     def use_item(self, item, quantity):
-        "*** YOUR CODE HERE ***"
+        self.items[item] -= quantity
+        if self.items[item] > 0:
+            print(f"'I have {self.items[item]} {item} left'")
+        else:
+            print(f"'Uh oh, buy more {item}!'")

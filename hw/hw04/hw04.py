@@ -10,8 +10,12 @@ def merge(lst1, lst2):
     >>> merge([5, 7], [2, 4, 6])
     [2, 4, 5, 6, 7]
     """
-    "*** YOUR CODE HERE ***"
-
+    if len(lst1) == 0 or len(lst2) == 0:
+        return lst1 + lst2
+    if lst1[0] < lst2[0]:
+        return [lst1[0]] + merge(lst1[1:], lst2)
+    else:
+        return [lst2[0]] + merge(lst1, lst2[1:])
 
 class Mint:
     """A mint creates coins by stamping on years.
@@ -48,10 +52,10 @@ class Mint:
         self.update()
 
     def create(self, coin):
-        "*** YOUR CODE HERE ***"
+        return coin(year=self.year)
 
     def update(self):
-        "*** YOUR CODE HERE ***"
+        self.year = Mint.present_year
 
 
 class Coin:
@@ -61,7 +65,12 @@ class Coin:
         self.year = year
 
     def worth(self):
-        "*** YOUR CODE HERE ***"
+        extra = Mint.present_year - self.year - 50
+        if extra > 0:
+            return self.cents + extra
+        else:
+            return self.cents
+
 
 
 class Nickel(Coin):
@@ -109,4 +118,35 @@ class VendingMachine:
     >>> w.vend()
     'Here is your soda.'
     """
-    "*** YOUR CODE HERE ***"
+    def __init__(self, product, price):
+        self.product = product
+        self.price = price
+        self.curr_stock = 0
+        self.balance = 0
+
+    def vend(self):
+        if self.curr_stock <= 0:
+            print("'Nothing left to vend. Please restock.'")
+            return
+        if self.balance < self.price:
+            print(f"'You must add ${self.price - self.balance} more funds.'")
+        elif self.balance == self.price:
+            print(f"'Here is your {self.product}.'")
+            self.curr_stock -= 1
+            self.balance = 0
+        else:
+            print(f"'Here is your {self.product} and ${self.balance - self.price} change.'")
+            self.curr_stock -= 1
+            self.balance = 0
+
+    def add_funds(self, funds):
+        if self.curr_stock <= 0:
+            print(f"'Nothing left to vend. Please restock. Here is your ${funds}.'")
+        else:
+            self.balance += funds
+            print(f"'Current balance: ${self.balance}'")
+
+
+    def restock(self, amount):
+        self.curr_stock += amount
+        print(f"'Current {self.product} stock: {self.curr_stock}'")
