@@ -1398,7 +1398,177 @@ When the `repr(obj)` (also `str()`)  function is called:
 - ...
 
 
+## 12. Iterators
+### 12.1 Reminder: Iterables
+Lists, tuples, dictionaries, strings, and ranges are all iterable objects.
 
+### 12.2 Iterators
+An iterator is an object that provides sequential access to values, one by one.
+
+- `iter(iterable)` returns an iterator over the elements of an iterable.
+
+- `next(iterator)` returns the next element in an iterator.
+
+``` python
+toppings = ["pineapple", "pepper", "mushroom", "roasted red pepper"]
+
+topperator = iter(toppings)
+next(iter) # 'pineapple'
+next(iter) # 'pepper'
+next(iter) # 'mushroom'
+next(iter) # 'roasted red pepper'
+next(iter) # ❌ StopIteration exception
+```
+
+***Calling `iter()` on an iterator just returns the iterator.***
+
+#### Dict Iterators
+***In Python 3.6+, items in a dict are ordered according to when they were added.***
+``` python
+prices = {"pineapple": 9.99, "pen": 2.99, "pineapple-pen": 19.99}
+
+# An iterator for keys
+price_iter = iter(prices.keys())
+next(price_iter)  # "pineapple"
+
+# An iterator for values
+price_iter = iter(prices.values())
+next(price_iter)  # 9.99
+
+# An iterator for key/value tuples:
+price_iter = iter(prices.items())
+next(price_iter)  # ("pineapple", 9.99)
+```
+
+### 12.3 Useful built-in functions
+
+|Function|Desc|
+|  ----  | ----  |
+|`list(iterable)`|Returns a list containing all items in iterable|
+|`tuple(iterable)`|Returns a tuple containing all items in iterable|
+|`sorted(iterable)`|Returns a sorted list containing all items in iterable|
+|`reversed(sequence)`|Iterate over item in sequence in reverse order|
+|`zip(*iterables)`|Iterate over co-indexed tuples with elements from each of the iterables|
+|`map(func, iterable, ...)`|Iterate over func(x) for x in iterable. Same as `[func(x) for x in iterable]`|
+|`filter(func, iterable)`|Iterate over x in iterable if func(x). Same as `[x for x in iterable if func(x)]`|
+
+``` python
+# reversed example
+chocolate_bars = ("90%", "70%", "55%")
+worst_first = reversed(chocolate_bars)
+
+for chocolate in worst_first:
+    print(chocolate)
+
+# zip example
+eng_nums = ["one", "two", "three"]
+esp_nums = ["uno", "dos", "tres"]
+
+for eng, esp in zip(eng_nums, esp_nums):
+    print(eng, esp)
+'''
+one uno
+two dos
+three tres
+'''
+
+# map example
+def double(num):
+    return num * 2
+
+doubled = list(map(double, [1, 2, 3]))
+
+lowered = list(map(lambda text: text.lower(), ["SuP", "HELLO", "Hi"]))
+
+print(lowered)
+'''
+['sup', 'hello', 'hi']
+'''
+```
+
+- can turn the iterator into a list using `list()`
+
+## 13. Generators
+
+### 13.1 Generators
+
+A generator function uses ***yield*** instead of return:
+``` python
+def evens():
+    num = 0
+    while num < 10:
+        yield num
+        num += 2
+
+evengen = evens() # call the generator function to get back a generator
+
+next(evengen)  # 0
+next(evengen)  # 2
+next(evengen)  # 4
+next(evengen)  # 6
+next(evengen)  # 8
+next(evengen)  # ❌ StopIteration exception
+```
+A generator is a type of ***iterator*** that yields results from a generator function.
+
+#### How does generators work?
+
+- When the function is called, Python immediately returns an iterator without entering the function.
+- When `next()` is called on the iterator, it executes the body of the generator ***from the last stopping point up to the next yield statement***.
+- If it finds a yield statement, it ***pauses on the next statement*** and returns the value of the yielded expression.
+- If it doesn't reach a yield statement, it stops at the end of the function and raises a `StopIteration` exception.
+
+#### Advantages
+
+- ***lazy*** function to save memory
+
+### 13.2 yield from
+
+A yield from statement can be used to yield the values from an iterable one at a time.
+
+Instead of ...
+``` python
+def a_then_b(a, b):
+    for item in a:
+        yield item
+    for item in b:
+        yield item
+
+list(a_then_b(["Apples", "Aardvarks"], ["Bananas", "BEARS"]))
+```
+we can write:
+``` python
+def a_then_b(a, b):
+    yield from a
+    yield from b
+
+list(a_then_b(["Apples", "Aardvarks"], ["Bananas", "BEARS"]))
+```
+
+A yield from can also yield the results of another generator function (which could be itself).
+
+``` python
+def countdown(k):
+    if k > 0:
+        yield k
+        yield from countdown(k - 1)
+```
+
+### 13.3 Generator functions with returns
+
+When a generator function executes a return statement, it ***exits and cannot yield more values.***
+
+``` python
+def f(x):
+    yield x
+    yield x + 1
+    return
+    yield x + 3
+
+list(f(2))  # [2, 3]
+```
+
+## 14 
 
 
 
