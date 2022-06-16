@@ -14,7 +14,17 @@ def reverse_link(lnk):
     >>> k
     Link(3, Link(5, Link(7, Link(9))))
     """
-    "*** YOUR CODE HERE ***"
+    elements = []
+    while not lnk is Link.empty:
+        elements.append(lnk.first)
+        lnk = lnk.rest
+    head = Link(0)
+    cur = head
+    for ele in reversed(elements):
+        cur.rest = Link(ele)
+        cur = cur.rest
+    return head.rest
+
 
 
 class Link:

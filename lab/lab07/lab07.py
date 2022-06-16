@@ -14,7 +14,17 @@ def store_digits(n):
     >>> print("Do not use str or reversed!") if any([r in cleaned for r in ["str", "reversed"]]) else None
     >>> link1 = Link(3, Link(Link(4), Link(5, Link(6))))
     """
-    "*** YOUR CODE HERE ***"
+    digits = []
+    while n > 0:
+        digits = [n % 10] + digits
+        n //= 10
+    head = Link(0)
+    pointer = head
+    for digit in digits:
+        pointer.rest = Link(digit)
+        pointer = pointer.rest
+    return head.rest
+    
 
 
 def cumulative_mul(t):
@@ -30,7 +40,10 @@ def cumulative_mul(t):
     >>> otherTree
     Tree(5040, [Tree(60, [Tree(3), Tree(4), Tree(5)]), Tree(42, [Tree(7)])])
     """
-    "*** YOUR CODE HERE ***"
+    if t:
+        for branch in t.branches:
+            cumulative_mul(branch)
+            t.label *= branch.label
 
 
 def has_cycle(link):
@@ -47,7 +60,14 @@ def has_cycle(link):
     >>> has_cycle(u)
     False
     """
-    "*** YOUR CODE HERE ***"
+    record = []
+    while not link is Link.empty:
+        if not link in record:
+            record.append(link)
+        else:
+            return True
+        link = link.rest
+    return False
 
 
 def has_cycle_constant(link):
@@ -61,7 +81,14 @@ def has_cycle_constant(link):
     >>> has_cycle_constant(t)
     False
     """
-    "*** YOUR CODE HERE ***"
+    fast = link
+    slow = link
+    while not fast is Link.empty and not fast.rest is Link.empty:
+        fast = fast.rest.rest
+        slow = slow.rest
+        if fast is slow:
+            return True
+    return False
 
 
 class Link:
