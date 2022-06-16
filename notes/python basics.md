@@ -1314,6 +1314,92 @@ class Rabbit(Animal):
 twinsies = Rabbit.rabbit_twins("Fluffy", "Hoppy")
 ```
 
+### 11.9 Built-in object attributes
+
+If all the built-in types and user classes inherit from object, what are they inheriting?
+
+- use `dir()`
+``` python
+dir(object)
+'''
+For string representation: __repr__, __str__, __format__
+For comparisons: __eq__, __ge__, __gt__, __le__, __lt__, __ne__
+Related to classes: __bases__, __class__, __new__, __init__, __init_subclass__, __subclasshook__, __setattr__, __delattr__, __getattribute__
+Others: __dir__, __hash__, __module__, __reduce__, __reduce_ex__
+'''
+```
+
+#### String representation `__str__` (`toString()` in java)
+
+The `__str__` method returns a human readable string representation of an object.
+
+``` python
+from fractions import Fraction
+
+one_third = 1/3
+one_half = Fraction(1, 2)
+float.__str__(one_third)      # '0.3333333333333333'
+Fraction.__str__(one_half)    # '1/2'
+```
+
+The `__str__` method is used in multiple places by Python: `print()` function, `str()` constructor, f-strings, and more.
+
+``` python
+print(one_third)             # '0.3333333333333333'
+print(one_half)              # '1/2'
+
+str(one_third)               # '0.3333333333333333'
+str(one_half)                # '1/2'
+
+f"{one_half} > {one_third}"  # '1/2 > 0.3333333333333333'
+```
+
+#### Custom `__str__` behavior
+
+When making custom classes, we can ***override*** `__str__` to define our human readable string representation.
+
+``` python
+class Lamb:
+    species_name = "Lamb"
+    scientific_name = "Ovis aries"
+
+    def __init__(self, name):
+        self.name = name
+
+    def __str__(self):
+        return "Lamb named " + self.name
+```
+
+#### `__repr__`
+
+The `__repr__` method returns a string that would evaluate to an object with the same values.
+
+``` python
+from fractions import Fraction
+
+one_half = Fraction(1, 2)
+Fraction.__repr__(one_half)           # 'Fraction(1, 2)'
+```
+
+The `__repr__` method is used multiple places by Python: when repr(object) is called and when displaying an object in an interactive Python session.
+
+#### The rule of repr and str
+
+When the `repr(obj)` (also `str()`)  function is called:
+- Python calls the `ClassName.__repr__` method if it exists.
+- If `ClassName.__repr__` does not exist, Python will look up the chain of parent classes until it finds one with `__repr__` defined.
+- If all else fails, `object.__repr__` will be called.
+
+#### Special methods
+
+- `__add__`	Method invoked to add one object to another
+- `__bool__`	Method invoked to convert an object to True or False
+- `__float__`	Method invoked to convert an object to a float (real number)
+- ...
+
+
+
+
 
 
 
