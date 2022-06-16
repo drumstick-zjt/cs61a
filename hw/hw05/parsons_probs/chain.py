@@ -12,7 +12,21 @@ def chain(t):
     >>> chain(t2)
     False
     """
-    "*** YOUR CODE HERE ***"
+    def recursive_helper(t, label):
+        if not t:
+            return True
+        if t.is_leaf():
+            return t.label == label
+        else:
+            for t in t.branches:
+                if recursive_helper(t, label):
+                    return True
+            return False
+    
+    if not t:
+        return True
+    else:
+        return recursive_helper(t, t.label)
 
 
 class Tree:

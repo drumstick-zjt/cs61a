@@ -1,3 +1,6 @@
+from cgitb import reset
+
+
 def flatten_link(lnk):
     """Takes a linked list and returns a flattened Python list with the same elements.
 
@@ -10,8 +13,13 @@ def flatten_link(lnk):
     >>> flatten_link(deep_link)
     [1, 2, 3, 4, 5, 6]
     """
-    "*** YOUR CODE HERE ***"
-
+    if not lnk:
+        return []
+    else:
+        if not isinstance(lnk, Link):
+            return [lnk]
+        else:
+            return flatten_link(lnk.first) + flatten_link(lnk.rest)
 
 class Link:
     empty = ()

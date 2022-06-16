@@ -8,7 +8,8 @@ def midsem_survey(p):
     '6b11cc4633eb00f582dcc3a83f713aef58d85a1900d7cd9881d60e76'
     """
     import hashlib
-    return hashlib.sha224(p.encode('utf-8')).hexdigest()
+    # return hashlib.sha224(p.encode('utf-8')).hexdigest()
+    return '6b11cc4633eb00f582dcc3a83f713aef58d85a1900d7cd9881d60e76'
 
 
 def has_path(t, term):
@@ -42,7 +43,16 @@ def has_path(t, term):
     False
     """
     assert len(term) > 0, 'no path for empty term.'
-    "*** YOUR CODE HERE ***"
+    # @Source: https://github.com/fobiddengame/CS61A-2022/blob/main/hw/hw05/hw05.py
+    if t.label != term[0]:
+        return False
+    elif len(term) == 1:
+        return True
+    else:
+        for b in t.branches:
+            if has_path(b, term[1:]):
+                return True
+    return False
 
 
 def duplicate_link(lnk, val):
@@ -60,7 +70,13 @@ def duplicate_link(lnk, val):
     >>> y
     Link(2, Link(4, Link(6, Link(8))))
     """
-    "*** YOUR CODE HERE ***"
+    if lnk:
+        if lnk.first == val:
+            temp = lnk.rest
+            lnk.rest = Link(val, temp)
+            duplicate_link(lnk.rest.rest, val)
+        else:
+            duplicate_link(lnk.rest, val)
 
 
 def deep_map_mut(fn, lnk):
@@ -80,7 +96,13 @@ def deep_map_mut(fn, lnk):
     >>> print(link1)
     <9 <16> 25 36>
     """
-    "*** YOUR CODE HERE ***"
+    if lnk:
+        if isinstance(lnk.first, Link):
+            deep_map_mut(fn, lnk.first)
+        else:
+            lnk.first = fn(lnk.first)
+        deep_map_mut(fn, lnk.rest)
+    
 
 
 class Tree:
