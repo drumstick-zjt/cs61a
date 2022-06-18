@@ -24,7 +24,9 @@ class Card:
         500
         """
         # BEGIN Problem 1
-        "*** YOUR CODE HERE ***"
+        self.name = name
+        self.attack = attack
+        self.defense = defense
         # END Problem 1
 
     def power(self, opponent_card):
@@ -44,7 +46,7 @@ class Card:
         -100
         """
         # BEGIN Problem 1
-        "*** YOUR CODE HERE ***"
+        return self.attack - opponent_card.defense
         # END Problem 1
 
     def effect(self, opponent_card, player, opponent):
@@ -84,7 +86,9 @@ class Player:
         self.deck = deck
         self.name = name
         # BEGIN Problem 2
-        "*** YOUR CODE HERE ***"
+        self.hand = []
+        for i in range(5):
+            self.draw()
         # END Problem 2
 
     def draw(self):
@@ -100,7 +104,7 @@ class Player:
         """
         assert not self.deck.is_empty(), 'Deck is empty!'
         # BEGIN Problem 2
-        "*** YOUR CODE HERE ***"
+        self.hand.append(self.deck.draw())
         # END Problem 2
 
     def play(self, index):
@@ -118,7 +122,7 @@ class Player:
         2
         """
         # BEGIN Problem 2
-        "*** YOUR CODE HERE ***"
+        return self.hand.pop(index)
         # END Problem 2
 
     def display_hand(self):
@@ -158,7 +162,8 @@ class AICard(Card):
         True
         """
         # BEGIN Problem 3
-        "*** YOUR CODE HERE ***"
+        player.hand.append(player.deck.cards.pop(0))
+        player.hand.append(player.deck.cards.pop(0))
         # END Problem 3
         # You should add your implementation above this.
         print(f"{self.name} allows me to draw two cards!")
@@ -202,10 +207,17 @@ class TutorCard(Card):
         """
         # BEGIN Problem 4
         added = None
+        if len(player.hand) > 0:
+            added = player.hand[0].copy()
+        if added:
+            player.hand.append(added)
         # END Problem 4
         # You should add your implementation above this.
         if added:
             print(f"{self.name} allows me to add a copy of a card to my hand!")
+
+    def power(self, opponent_card):
+        return -float('inf')
 
     def copy(self):
         """
@@ -241,6 +253,14 @@ class TACard(Card):
         """
         # BEGIN Problem 5
         best_card = None
+        if len(player.hand) > 0:
+            best_index = 0
+            for i in range(1, len(player.hand)):
+                if player.hand[i].power(opponent_card) > player.hand[best_index].power(opponent_card):
+                    best_index = i
+            best_card = player.hand.pop(best_index)
+            self.attack += best_card.attack
+            self.defense += best_card.defense
         # END Problem 5
         if best_card:
             print(f"{self.name} discards {best_card.name} from my hand to increase its own power!")
@@ -280,6 +300,11 @@ class InstructorCard(Card):
         """
         # BEGIN Problem 6
         readd = None
+        self.attack -= 1000
+        self.defense -= 1000
+        if self.attack >= 0 or self.defense >= 0:
+            readd = self
+            player.hand.append(readd)
         # END Problem 6
         # You should add your implementation above this.
         if readd:
