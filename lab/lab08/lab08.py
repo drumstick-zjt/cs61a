@@ -1,3 +1,6 @@
+import copy
+
+
 def repeated(t, k):
     """Return the first value in iterator T that appears K times in a row.
     Iterate through the items such that if the same iterator is passed into
@@ -20,7 +23,24 @@ def repeated(t, k):
     2
     """
     assert k > 1
-    "*** YOUR CODE HERE ***"
+    def generator():
+        pre = None
+        times = k
+        for item in t:
+            if pre == None:
+                pre = item
+                times -= 1
+            else:
+                if item == pre:
+                    times -= 1
+                    if times == 0:
+                        times = k - 1
+                        yield item
+                else:
+                    pre = item
+                    times = k - 1
+
+    return next(generator())
 
 
 def merge(incr_a, incr_b):
@@ -42,7 +62,32 @@ def merge(incr_a, incr_b):
     """
     iter_a, iter_b = iter(incr_a), iter(incr_b)
     next_a, next_b = next(iter_a, None), next(iter_b, None)
-    "*** YOUR CODE HERE ***"
+    pre = None
+    while not next_a == None or not next_b == None:
+        if next_a == None:
+            pre = next_b
+            yield next_b
+            next_b = next(iter_b, None)
+        elif next_b == None:
+            pre = next_a
+            yield next_a
+            next_a = next(iter_a, None)
+        elif next_a < next_b:
+            if not next_a == pre:
+                pre = next_a
+                yield next_a
+            next_a = next(iter_a, None)
+        elif next_a == next_b:
+            if not next_a == pre:
+                pre = next_a
+                yield next_a
+            next_a = next(iter_a, None)
+            next_b = next(iter_b, None)
+        else:
+            if not next_b == pre:
+                pre = next_b
+                yield next_b
+            next_b = next(iter_b, None)        
 
 
 def deep_len(lnk):
@@ -59,12 +104,12 @@ def deep_len(lnk):
     >>> deep_len(levels)
     5
     """
-    if ______________:
+    if lnk is Link.empty:
         return 0
-    elif ______________:
+    elif not isinstance(lnk, Link):
         return 1
     else:
-        return _________________________
+        return deep_len(lnk.first) + deep_len(lnk.rest)
 
 
 def add_d_leaves(t, v):
@@ -125,7 +170,13 @@ def add_d_leaves(t, v):
           10
         10
     """
-    "*** YOUR CODE HERE ***"
+    def helper(t, v, d):
+        for branch in t.branches:
+            helper(branch, v, d + 1)
+        for i in range(d):
+            t.branches.append(Tree(v))
+    helper(t, v, 0)
+
 
 
 def insert_into_all(item, nested_list):
@@ -137,8 +188,11 @@ def insert_into_all(item, nested_list):
     >>> insert_into_all(0, nl)
     [[0], [0, 1, 2], [0, 3]]
     """
-    "*** YOUR CODE HERE ***"
-
+    ret = copy.deepcopy(nested_list) # the list is a nested list that should be deepcopied
+    r = range(len(ret))
+    for i in r:
+        ret[i].append(item)
+    return ret
 
 def subseqs(s):
     """Return a nested list (a list of lists) of all subsequences of S.
@@ -150,13 +204,16 @@ def subseqs(s):
     >>> subseqs([])
     [[]]
     """
-    if ________________:
-        ________________
+    if len(s) == 0:
+        return [[]]
+    if len(s) == 1:
+        return [[], s]
     else:
-        ________________
-        ________________
+        without_last_item = subseqs(s[0:len(s) - 1])
+        extra = insert_into_all(s[len(s)-1], without_last_item)
+        return extra + without_last_item
 
-
+# I quit thie question.
 def non_decrease_subseqs(s):
     """Assuming that S is a list, return a nested list of all subsequences
     of S (a list of lists) for which the elements of the subsequence
@@ -209,11 +266,12 @@ def shuffle(cards):
     ['AH', 'AD', 'AS', 'AC', '2H', '2D', '2S', '2C', '3H', '3D', '3S', '3C']
     """
     assert len(cards) % 2 == 0, 'len(cards) must be even'
-    half = _______________
+    first_half = cards[0:len(cards)//2]
+    second_half = cards[len(cards)//2:]
     shuffled = []
-    for i in _____________:
-        _________________
-        _________________
+    for i in range(len(first_half)):
+        shuffled.append(first_half[i])
+        shuffled.append(second_half[i])
     return shuffled
 
 
@@ -234,9 +292,12 @@ def pairs(lst):
     5 4
     5 5
     """
-    "*** YOUR CODE HERE ***"
+    for x in lst:
+        for y in lst:
+            yield x,y
+    
 
-
+# I quit this question.
 class PairsIterator:
     """
     >>> for x, y in PairsIterator([3, 4, 5]):
@@ -262,7 +323,7 @@ class PairsIterator:
     def __iter__(self):
         "*** YOUR CODE HERE ***"
 
-
+# I quit this question
 def long_paths(tree, n):
     """Return a list of all paths in tree with length at least n.
 
@@ -294,7 +355,7 @@ def long_paths(tree, n):
     """
     "*** YOUR CODE HERE ***"
 
-
+# I quit this question.
 def flip_two(s):
     """
     >>> one_lnk = Link(1)
