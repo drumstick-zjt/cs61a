@@ -85,7 +85,8 @@ class Buffer:
         """
 
         # BEGIN
-        "*** YOUR CODE HERE ***"
+        self.generator = self.create_generator(source)
+        self.current = next(self.generator)
         # END
 
     def create_generator(self, source):
@@ -94,7 +95,10 @@ class Buffer:
         yield EOL_TOKEN.
         """
         # BEGIN
-        "*** YOUR CODE HERE ***"
+        for line in source:
+            for token in line:
+                yield token
+            yield EOL_TOKEN
         # END
 
     def pop_first(self):
@@ -104,7 +108,9 @@ class Buffer:
         the current token to be None.
         """
         # BEGIN
-        "*** YOUR CODE HERE ***"
+        ret = self.current
+        self.current = next(self.generator, None)
+        return ret
         # END
 
     def end_of_line(self):
