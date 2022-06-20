@@ -1568,7 +1568,154 @@ def f(x):
 list(f(2))  # [2, 3]
 ```
 
-## 14 
+## 14 Modularity
+
+## 14.1 Modules
+
+### python module
+
+A Python module is a file typically containing function or class definitions.
+
+``` python
+class Link:
+    empty = ()
+
+    def __init__(self, first, rest=empty):
+        assert rest is Link.empty or isinstance(rest, Link)
+        self.first = first
+        self.rest = rest
+
+    def __repr__(self):
+        if self.rest:
+            rest_repr = ', ' + repr(self.rest)
+        else:
+            rest_repr = ''
+        return 'Link(' + repr(self.first) + rest_repr + ')'
+
+    def __str__(self):
+        string = '<'
+        while self.rest is not Link.empty:
+            string += str(self.first) + ' '
+            self = self.rest
+        return string + str(self.first) + '>'
+```
+
+### Importing
+
+Importing a whole module:
+``` python
+import link
+
+ll = link.Link(3, link.Link(4, link.Link(5)))
+```
+
+Importing specific names:
+``` python
+from link import Link
+
+ll = Link(3, Link(4, Link(5)))
+```
+
+Importing all names:
+``` python 
+from link import *
+
+ll = Link(3, Link(4, Link(5)))
+```
+
+Importing with alias:
+- aliasing a class or function name is not recommended
+- aliasing a whole module is sometimes okay
+
+``` python
+from link import Link as LL # not recommended
+
+ll = LL(3, LL(4, LL(5)))
+
+import numpy as np # sometimes ok
+
+b = np.array([(1.5, 2, 3), (4, 5, 6)])
+```
+
+### Running a module
+
+``` bash
+$ python module.py # this command runs a module
+```
+
+When run like that, Python sets a global variable `__name__` to "main". That means you often see code at the bottom of modules like this:
+
+``` python
+if __name__ == "__main__":
+    # use the code in the module somehow
+```
+
+The code inside that condition will be executed as well, but ***only when the module is run directly.***
+
+## 14.2 Packages
+
+### python package
+
+A Python package is a way of bundling multiple related modules together. Popular packages are NumPy and Pillow.
+
+```
+sound/                        Top-level package
+    __init__.py               Initialize the sound package
+    formats/                  Subpackage for file format conversions
+            __init__.py
+            wavread.py
+            wavwrite.py
+            aiffread.py
+            aiffwrite.py
+            auread.py
+            auwrite.py
+            ...
+    effects/                  Subpackage for sound effects
+            __init__.py
+            echo.py
+            surround.py
+            reverse.py
+            ...
+    filters/                  Subpackage for filters
+            __init__.py
+            equalizer.py
+            vocoder.py
+            karaoke.py
+            ...
+```
+
+### Importing from a package
+
+``` python
+# Importing a whole path:
+import sound.effects.echo
+
+sound.effects.echo.echofilter(input, output, delay=0.7, atten=4)
+
+# Importing a module from the path:
+from sound.effects import echo
+
+echo.echofilter(input, output, delay=0.7, atten=4)
+```
+
+### Installing packages
+
+``` bash
+pip3 install <package_name>
+```
+
+## 14.3 Modularity
+
+### Modular design
+
+
+
+
+
+## 14.4 Modular design
+
+
+
 
 
 
