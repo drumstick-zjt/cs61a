@@ -392,3 +392,280 @@ examples:
 - ***Eval***: An empty combination raises `TypeError("() is not a number or call expression")`
 - ***Apply***: No arguments to `-` raises` TypeError("- requires at least 1 argument")`
 
+# 5. Scheme Data Abstraction
+
+## 5.1 Data Abs
+
+Scheme does not support OOP or have a dictionary data type, so how can we represent compound values?
+
+A ***data abstraction*** lets us manipulate compound values as units, without needing to worry about the way the values are stored.
+
+### Pair abs
+
+If we needed to frequently manipulate "pairs" of values in our program, we could use a `pair` data abstraction.
+
+- `(pair a b)` : constructs a new pair from the two arguments.
+- `(first pair)` : returns the first value in the given pair.
+- `(second pair)` : returns the second value in the given pair.
+
+``` scheme
+(define couple (pair 'neil 'david))
+
+(first couple)   ; 'neil
+(second couple)  ; 'david
+```
+
+### Pair implementation
+
+Only the developers of the pair abstraction needs to know/decide how to implement it.
+
+``` scheme
+(define (pair a b)
+    (cons a (cons b '()))
+)
+
+(define (first pair)
+    (car pair)
+)
+
+(define (second pair)
+    (car (cdr pair))
+)
+```
+
+## 5.2 Rational Abs
+
+If we needed to represent fractions exactly:
+
+- construtor: `(rational n d)`
+- selectors:
+    - `(number r)`
+    - `(denom r)`
+
+``` scheme
+(define quarter (rational 1 4))
+(numer quarter) ; 1
+(denom quarter) ; 4
+```
+
+### Rational number arithmetic code
+
+``` scheme
+(define (mul-rational x y)
+    (rational 
+        (* (numer x) (numer y))
+        (* (denom x) (denom y))
+    )
+)
+; example:
+(mul-rational (rational 3 2) (rational 3 5))  ; (9 10)
+```
+
+$$
+\frac{n_x}{d_x} \times \frac{n_y}{d_y} = \frac{n_x \times n_y}{d_x \times d_y}
+$$
+
+``` scheme
+(define (add-rational x y)
+    (define nx (numer x))
+    (define dx (denom x))
+    (define ny (numer y))
+    (define dy (denom y))
+    (rational
+        (+ (* nx dy) (* ny dx) )
+        (* dx dy)
+    )
+)
+
+(add-rational (rational 3 2) (rational 3 5))  ; (21 10)
+```
+
+$$
+\frac{n_x}{d_x} + \frac{n_y}{d_y} = \frac{n_x \times d_y + n_y \times d_x}{d_x \times d_y}
+$$
+
+### Rational numbers implementation
+
+``` scheme
+; Construct a rational number that represents N/D
+(define (rational n d)
+    (list n d)   
+)
+
+; Return the numerator of rational number R.
+(define (numer r)
+    (car r)
+)
+
+; Return the denominator of rational number R.
+(define (denom r)
+    (car (cdr r))
+)
+```
+
+### GCD
+
+``` scheme
+(define (gcd a b)
+    (if (= b 0)
+        (abs a)
+        (gcd b (modulo a b))))
+
+(define (rational n d)
+        (let ((g (if (> d 0)
+                     (gcd n d)
+                     (- (gcd n d)))))
+          (list (/ n g) (/ d g))))
+```
+
+### Layers of abstraction
+
+<img src=".\assets\week5\labs.png" alt="layer_abs" style="zoom:33%;" />
+
+***Each layer only uses the layer above it.***
+
+``` scheme
+(add-rational (list 1 2)  (list 1 4))
+; Doesn't use constructor!
+```
+
+## 5.3 Tree Abs
+
+- `(tree label branches)`: Returns a tree with root label and list of branches
+- `(label t)`: Returns the root label of t
+- `(branches t)`: Returns the branches of t (each a tree).
+- `(is-leaf t)`: Returns true if t is a leaf node.
+
+```scheme
+(define t
+    (tree 3
+          (list (tree 1 nil)
+                (tree 2 (list (tree 1 nil) (tree 1 nil))))))
+
+(label t)       ; 3
+(branches t)    ; ((1) (2 (1) (1)))
+(is-leaf t)     ; #f
+```
+
+Each tree is stored as a list where first element is label and subsequent elements are branches.
+
+``` scheme
+(define t
+    (tree 3
+          (list (tree 1 nil)
+                (tree 2 (list (tree 1 nil) (tree 1 nil))))))
+```
+
+``` scheme
+(define (tree label branches)
+    (cons label branches))
+  
+(define (label t) (car t))
+  
+(define (branches t) (cdr t))
+  
+(define (is-leaf t) (null? (branches t)))
+```
+
+### exercise: double every lable of a tree
+
+- about [map](#map)
+
+``` scheme
+(define (double tr)
+    ; Returns a tree identical to TR, but with all labels doubled.
+    (tree (* (label tr) 2) (map double (branches tr)))
+)
+```
+
+# 6. Scheme Programs as Data
+
+## 6.1 Eval
+
+The `eval` procedure evaluates a given expression in the current environment.
+
+Quote supresses evaluation, while eval forces evaluation. ***They can cancel each other out!***
+
+``` scheme
+(define x 3)
+'x           ; x
+(eval 'x)    ; 3
+```
+
+## 6.2 Generating call expressions
+
+### Generating factorial expressions
+
+``` scheme
+; standard:
+(define (fact n)
+    (if (= n 0)
+        1
+        (* n (fact (- n 1)))))
+(fact 5)  ; 120
+
+; to a version that generates an expression
+(define (fact-exp n)
+    (if (= n 0)
+        1
+        (list '* n (fact-exp (- n 1)))))
+(fact-exp 5)        ; (* 5 (* 4 (* 3 (* 2 (* 1 1)))))
+(eval (fact-exp 5)) ; 5
+```
+
+## 6.3 Generating Programs
+
+### Quasiquotation
+
+There are two ways to quote an expression:
+- Quote	`'(a b)` → `(a b)`
+- Quasiquote	\`(a b) → `(a b)`
+
+They are different because parts of a quasiquoted expression can be unquoted with `,`
+
+``` scheme
+(define b 4)
+'(a ,(+ b 1)) → (a (unquote (+ b 1))
+`(a ,(+ b 1)) → (a 5)
+```
+
+### Generating code with quasiquotation
+Quasiquotation is particularly convenient for generating Scheme expressions:
+
+``` scheme
+(define (make-adder n) `(lambda (d) (+ d ,n)))
+
+(make-adder 2)        ; (lambda (d) (+ d 2))
+
+; -----------the generated expression is a Scheme list--------
+(define new-func (make-adder 2))
+new-func         ; (lambda (d) (+ d 2))
+(list? new-func) ; #t
+(car new-func)   ; lambda
+```
+
+## 6.4 Apply
+
+The `apply` procedure applies a given procedure to a list of arguments.
+
+``` scheme
+(apply <procedure> <arguments>)
+;-----------------------
+(apply + '(1 2 3 ))
+
+(define (sum s) (apply + s))
+(sum '(1 2 3))
+```
+
+### Combining eval and apply
+
+A function that can apply any function expression to any list of arguments:
+
+``` scheme
+(define (call-func func-expression func-args)
+    (apply (eval func-expression) func-args)
+)
+
+(call-func '(lambda (a b) (+ a b)) '(3 4))  ; 7
+```
+
