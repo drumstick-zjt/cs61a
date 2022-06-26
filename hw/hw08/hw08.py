@@ -23,7 +23,7 @@ def cs_classes(post):
     >>> cs_classes("What are some good CS upper division courses? I was thinking about CS 161 or CS 169a")
     True
     """
-    return bool(re.search(__________, post))
+    return bool(re.search(r"(cs|Cs|cS|CS|ee|eE|Ee|EE)\s?(\d)[A-Ca-c]?", post))
 
 
 import re
@@ -48,4 +48,4 @@ def match_time(text):
     >>> match_time("The tennis score was 40:30.")
     False
     """
-    return bool(re.search(__________, text))
+    return bool(re.search(r"(0\d|1[0-2]):([0-5]\d|60)[AP]M|([0-1]\d|2[0-3]):([0-5]\d|60)", text))
