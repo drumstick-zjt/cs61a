@@ -8,10 +8,23 @@
 
 (define (get-lon city) (car (cdr (cdr city))))
 
-(define (distance city-a city-b) 'YOUR-CODE-HERE)
+(define (distance city-a city-b) 
+        (sqrt (
+                +     
+                (expt (- (get-lat city-a) (get-lat city-b)) 2)
+                (expt (- (get-lon city-a) (get-lon city-b)) 2)  
+            )
+        )
+)
 
 (define (closer-city lat lon city-a city-b)
-  'YOUR-CODE-HERE)
+    (
+        cond
+            ((> (distance city-b (make-city 'temp lat lon)) (distance city-a (make-city 'temp lat lon))) (get-name city-a))
+            (else (get-name city-b))
+    )    
+)
+
 
 ; Teacher and Student Abstractions
 (define (student-create name classes)
@@ -21,25 +34,60 @@
   (cons name (cons class students)))
 
 (define (student-get-name student)
-  'YOUR-CODE-HERE)
+    (
+        car student
+    )  
+)
 
 (define (student-get-classes student)
-  'YOUR-CODE-HERE)
+    (
+        cdr student
+    )
+)
 
 (define (teacher-get-name teacher)
-  'YOUR-CODE-HERE)
+    (
+        car teacher
+    )
+)
 
 (define (teacher-get-class teacher)
-  'YOUR-CODE-HERE)
+    (
+        car (cdr teacher)
+    )
+)
 
 (define (teacher-get-students teacher)
-  'YOUR-CODE-HERE)
+    (
+        cdr (cdr teacher)
+    )
+)
 
 (define (student-attend-class student class)
-  'YOUR-CODE-HERE)
+    (student-create
+        (student-get-name student)
+        (append (list class) (student-get-classes student))
+    )
+)
+
+; This one is very hard. Pay attentionto line 78, espeically: <',class>
+(define (student-attend-class-helper class)
+    `(lambda (student)
+        (student-create
+            (student-get-name student)
+            (append (list ',class) (student-get-classes student))
+        )
+    )
+)
+
 
 (define (teacher-hold-class teacher)
-  'YOUR-CODE-HERE)
+    (teacher-create
+        (teacher-get-name teacher)
+        (teacher-get-class teacher)
+        (map (eval (student-attend-class-helper (teacher-get-class teacher))) (teacher-get-students teacher))
+    )
+)
 
 ; Rational Abstraction
 ; Helpers
