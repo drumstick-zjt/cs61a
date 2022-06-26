@@ -25,7 +25,7 @@ def scientific_name(name):
     >>> scientific_name("I want a pet T. rex right now")
     False
     """
-    return bool(re.search(__________, name))
+    return bool(re.search(r"^[A-Z](\.|[a-z]+)\s[a-z]+$", name))
 
 
 import re
@@ -49,7 +49,7 @@ def calculator_ops(calc_str):
     >>> calculator_ops("+ 3 23")
     False
     """
-    return bool(re.search(__________, calc_str))
+    return bool(re.search(r"\([\+\-\*/]\s\d\s\d\)", calc_str))
 
 
 import re
@@ -73,4 +73,4 @@ def roman_numerals(text):
     >>> roman_numerals("she loves ALL editors equally.")
     False
     """
-    return bool(re.search(__________, text))
+    return bool(re.search(r"\b[IVXLCDM]+\b", text))
