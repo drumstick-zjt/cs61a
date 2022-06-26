@@ -1,15 +1,26 @@
 (define (cadr lst) (car (cdr lst)))
 
 (define (make-kwlist1 keys values)
-  'YOUR-CODE-HERE)
+    (
+        cons keys (cons values nil)
+    )
+)
 
-(define (get-keys-kwlist1 kwlist) 'YOUR-CODE-HERE)
+(define (get-keys-kwlist1 kwlist)
+    (
+        car kwlist
+    )
+)
 
 (define (get-values-kwlist1 kwlist)
-  'YOUR-CODE-HERE)
+    (
+        cadr kwlist
+    )
+)
 
 (define (make-kwlist2 keys values)
-  'YOUR-CODE-HERE)
+    'YOUR-CODE-HERE
+)
 
 (define (get-keys-kwlist2 kwlist) 'YOUR-CODE-HERE)
 
